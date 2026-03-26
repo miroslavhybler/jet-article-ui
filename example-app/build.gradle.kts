@@ -52,6 +52,12 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+
+    // Ktor for networking
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.logging.jvm)
+    implementation(libs.ktor.client.serialization)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

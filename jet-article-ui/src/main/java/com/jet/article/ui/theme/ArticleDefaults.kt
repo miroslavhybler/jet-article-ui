@@ -10,7 +10,6 @@ import com.jet.article.ui.elements.Code
 import com.jet.article.ui.elements.ContentList
 import com.jet.article.ui.elements.ContentTable
 import com.jet.article.ui.elements.ImageElement
-import com.jet.article.ui.elements.QuoteContainer
 import com.jet.article.ui.elements.TextElement
 
 
@@ -64,7 +63,7 @@ object ArticleDefaults {
      */
     @Composable
     fun Quote(quote: ArticleElement.Quote) {
-        QuoteContainer(quote = quote)
+        com.jet.article.ui.elements.Quote(quote = quote)
     }
 
     /**

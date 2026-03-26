@@ -1,6 +1,7 @@
 package com.jet.article.ui.elements
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,6 +22,7 @@ import com.jet.article.core.ArticleElement
 import com.jet.article.ui.R
 import com.jet.article.ui.theme.ArticleDefaults
 import com.jet.article.ui.theme.LocalArticleColorScheme
+import com.jet.article.ui.theme.LocalArticleDimensions
 
 @Composable
 fun ContentList(
@@ -32,16 +34,20 @@ fun ContentList(
     textContent: @Composable (text: ArticleElement.Text) -> Unit = { ArticleDefaults.Text(it) },
 ) {
     val density = LocalDensity.current
+    val dimensions = LocalArticleDimensions.current
 
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.spacedBy(space = dimensions.spaceBetweenListItems)) {
         list.items.fastForEach { item ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Top,
+
             ) {
                 Icon(
                     modifier = Modifier
-                        .padding(end = 6.dp)
+                        .padding(end = dimensions.spaceBetweenIconAndTextInList)
                         .size(with(receiver = density) { style.fontSize.toDp() }),
                     painter = painterResource(id = bulletRes),
                     contentDescription = null,

@@ -13,7 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.jet.article.core.ArticleElement
-import com.jet.article.ui.elements.Code
+import com.jet.article.ui.LinkClickHandler
 import com.jet.article.ui.theme.ArticleColorScheme
 import com.jet.article.ui.theme.ArticleDefaults
 import com.jet.article.ui.theme.ArticleDimensions

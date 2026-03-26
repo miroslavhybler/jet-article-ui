@@ -9,10 +9,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import com.jet.article.core.ArticleElement
 import com.jet.article.ui.theme.ArticleTheme
+import com.jet.article.ui.theme.LocalArticleDimensions
 
 @Composable
 fun Code(
@@ -20,12 +20,12 @@ fun Code(
     modifier: Modifier = Modifier,
     shape: Shape = MaterialTheme.shapes.small,
 ) {
-
+    val dimensions = LocalArticleDimensions.current
     Box(
         modifier = modifier
             .fillMaxWidth()
             .background(color = ArticleTheme.colorScheme.codeContainerColor, shape = shape)
-            .padding(all = 12.dp)
+            .padding(paddingValues = dimensions.codePaddingValues)
     ) {
         Text(
             text = text.text,

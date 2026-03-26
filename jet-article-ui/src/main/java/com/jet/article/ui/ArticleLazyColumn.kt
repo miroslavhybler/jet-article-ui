@@ -13,15 +13,19 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.jet.article.core.ArticleElement
+import com.jet.article.core.Link
+import com.jet.article.ui.LinkClickHandler
 import com.jet.article.ui.theme.ArticleColorScheme
 import com.jet.article.ui.theme.ArticleDefaults
 import com.jet.article.ui.theme.ArticleDimensions
 import com.jet.article.ui.theme.ArticleTypography
 import com.jet.article.ui.theme.articleColorScheme
 import com.jet.article.ui.theme.articleTypography
+import kotlinx.coroutines.launch
 
 
 private const val HEADER_LAZY_KEY: Int = Int.MIN_VALUE
@@ -82,9 +86,32 @@ fun ArticleLazyColumn(
 
     val articleUrl by remember { derivedStateOf { state.data.url } }
     val linkClickHandler = remember { LinkClickHandler() }
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(key1 = linkCallback) {
-        linkClickHandler.callback = linkCallback
+        linkClickHandler.callback = object : LinkClickHandler.LinkCallback() {
+            override fun onSectionLink(link: Link.SectionLink) {
+                val index = state.getElementIndexById(link.fullLink.removePrefix("#"))
+                if (index != -1) {
+                    coroutineScope.launch {
+                        lazyListState.animateScrollToItem(index)
+                    }
+                }
+                linkCallback.onSectionLink(link)
+            }
+
+            override fun onSameDomainLink(link: Link.SameDomainLink) {
+                linkCallback.onSameDomainLink(link)
+            }
+
+            override fun onOtherDomainLink(link: Link.OtherDomainLink) {
+                linkCallback.onOtherDomainLink(link)
+            }
+
+            override fun onUriLink(link: Link.UriLink) {
+                linkCallback.onUriLink(link)
+            }
+        }
     }
 
 
@@ -167,6 +194,3 @@ private fun ArticleLazyColumnImpl(
         }
     }
 }
-
-
-

@@ -1,5 +1,6 @@
 package com.jet.article.ui.theme
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.unit.Dp
@@ -20,6 +21,11 @@ data class ArticleDimensions constructor(
     val titleTopLinePadding: Dp,
     val tableMinColumnWidth: Dp,
     val tableMaxColumnWidth: Dp,
+    val spaceBetweenIconAndTextInList: Dp,
+    val spaceBetweenListItems: Dp,
+    val spaceBetweenQuoteAndVerticalLine: Dp,
+
+    val codePaddingValues: PaddingValues,
 ) {
     companion object {
         val Default: ArticleDimensions = ArticleDimensions(
@@ -31,6 +37,11 @@ data class ArticleDimensions constructor(
             titleTopLinePadding = 24.dp,
             tableMinColumnWidth = 128.dp,
             tableMaxColumnWidth = 256.dp,
+
+            spaceBetweenIconAndTextInList = 6.dp,
+            spaceBetweenListItems = 6.dp,
+            spaceBetweenQuoteAndVerticalLine = 12.dp,
+            codePaddingValues = PaddingValues(all = 12.dp),
         )
     }
 }

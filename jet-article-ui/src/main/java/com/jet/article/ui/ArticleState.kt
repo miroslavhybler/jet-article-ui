@@ -12,6 +12,9 @@ class ArticleState internal constructor(
 ) {
     var data by mutableStateOf(value = initialData)
 
+    fun getElementIndexById(id: String): Int {
+        return data.elements.indexOfFirst { it.ids.contains(id) }
+    }
 }
 
 

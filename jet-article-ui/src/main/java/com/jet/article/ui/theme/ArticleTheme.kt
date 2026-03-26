@@ -24,6 +24,7 @@ import androidx.compose.ui.text.TextStyle
 data class ArticleColorScheme constructor(
     val titleColor: Color,
     val textColor: Color,
+    val linkColor: Color,
     val quoteContainerColor: Color,
     val quoteTextColor: Color,
     val quoteVerticalLineColor: Color,
@@ -39,6 +40,7 @@ val LocalArticleColorScheme = staticCompositionLocalOf {
     ArticleColorScheme(
         titleColor = Color.Unspecified,
         textColor = Color.Unspecified,
+        linkColor = Color.Unspecified,
         quoteContainerColor = Color.Unspecified,
         quoteTextColor = Color.Unspecified,
         quoteVerticalLineColor = Color.Unspecified,
@@ -122,6 +124,7 @@ object ArticleTheme {
 fun articleColorScheme() = ArticleColorScheme(
     titleColor = MaterialTheme.colorScheme.primary,
     textColor = MaterialTheme.colorScheme.onBackground,
+    linkColor = MaterialTheme.colorScheme.primary,
     quoteContainerColor = MaterialTheme.colorScheme.surfaceVariant,
     quoteTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
     quoteVerticalLineColor = MaterialTheme.colorScheme.tertiary,

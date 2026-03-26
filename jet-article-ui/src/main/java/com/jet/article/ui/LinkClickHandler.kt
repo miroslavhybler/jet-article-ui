@@ -2,8 +2,8 @@ package com.jet.article.ui
 
 import android.util.Log
 import androidx.annotation.Keep
+import androidx.core.net.toUri
 import com.jet.article.core.Link
-import java.net.URISyntaxException
 
 /**
  * @param callback
@@ -17,19 +17,35 @@ class LinkClickHandler internal constructor() {
 
     var callback: LinkCallback? = null
 
-    /**
-     * @param link The link to handle.
-     * @param articleUrl The URL of the article, used to resolve relative links.
-     */
-    internal fun handleLink(
-        link: String,
-        articleUrl: String?,
-    ) {
-        val linkData = getLink(
-            rawLink = link,
-            articleUrl = articleUrl,
-        )
-        onLink(link = linkData)
+    fun handleCustomUrl(customUrl: String) {
+        val uri = customUrl.toUri()
+        if (uri.scheme != "jetarticle") {
+            return
+        }
+
+        val link = when (uri.authority) {
+            "same-domain" -> Link.SameDomainLink(
+                rawLink = uri.getQueryParameter("url") ?: "",
+                fullLink = uri.getQueryParameter("url") ?: ""
+            )
+            "other-domain" -> Link.OtherDomainLink(
+                rawLink = uri.getQueryParameter("url") ?: "",
+                fullLink = uri.getQueryParameter("url") ?: ""
+            )
+            "section" -> Link.SectionLink(
+                rawLink = uri.getQueryParameter("id") ?: "",
+                fullLink = uri.getQueryParameter("id") ?: ""
+            )
+            "uri" -> Link.UriLink(
+                rawLink = uri.getQueryParameter("uri") ?: "",
+                fullLink = uri.getQueryParameter("uri") ?: ""
+            )
+            else -> null
+        }
+
+        if (link != null) {
+            onLink(link = link)
+        }
     }
 
     private fun onLink(link: Link) {
@@ -44,56 +60,6 @@ class LinkClickHandler internal constructor() {
             is Link.SameDomainLink -> callback?.onSameDomainLink(link = link)
             is Link.OtherDomainLink -> callback?.onOtherDomainLink(link = link)
         }
-    }
-
-    private fun getLink(
-        rawLink: String,
-        articleUrl: String?,
-    ): Link {
-        if (rawLink.startsWith(prefix = "#")) {
-            return Link.SectionLink(rawLink = rawLink, fullLink = rawLink)
-        }
-
-        if (rawLink.startsWith(prefix = "mailto:") || rawLink.startsWith(prefix = "tel:")) {
-            return Link.UriLink(rawLink = rawLink, fullLink = rawLink)
-        }
-
-        val mDomain = try {
-            articleUrl?.toDomainName()
-        } catch (e: URISyntaxException) {
-            null
-        }
-        val linkDomain = try {
-            rawLink.toDomainName()
-        } catch (e: URISyntaxException) {
-            null
-        }
-
-        val fullLink = validateLink(
-            rawLink = rawLink,
-            articleUrl = articleUrl
-        )
-
-        if (
-            (mDomain != null && linkDomain != null)
-            && mDomain == linkDomain
-        ) {
-            //Must be link within same domain
-            return Link.SameDomainLink(rawLink = rawLink, fullLink = fullLink)
-        }
-
-        return Link.OtherDomainLink(rawLink = rawLink, fullLink = fullLink)
-    }
-
-    private fun validateLink(rawLink: String, articleUrl: String?): String {
-        var fullLink = rawLink
-        if (!rawLink.startsWith(prefix = "http://") && !rawLink.startsWith(prefix = "https://")) {
-            val base = articleUrl?.toDomainName()?.removeSuffix(suffix = "/")
-            val end = rawLink.removePrefix(prefix = "/")
-            fullLink = "www.$base/$end"
-        }
-
-        return fullLink
     }
 
     /**
@@ -129,14 +95,5 @@ class LinkClickHandler internal constructor() {
         open fun onUriLink(
             link: Link.UriLink,
         ) = Unit
-    }
-}
-
-private fun String.toDomainName(): String? {
-    return try {
-        val uri = java.net.URI(this)
-        uri.host
-    } catch (e: URISyntaxException) {
-        null
     }
 }
