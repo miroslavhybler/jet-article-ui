@@ -23,6 +23,10 @@ fun Code(
     val dimensions = LocalArticleDimensions.current
     Box(
         modifier = modifier
+            .padding(
+                start = dimensions.startPadding,
+                end = dimensions.endPadding,
+            )
             .fillMaxWidth()
             .background(color = ArticleTheme.colorScheme.codeContainerColor, shape = shape)
             .padding(paddingValues = dimensions.codePaddingValues)

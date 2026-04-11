@@ -1,8 +1,6 @@
 package com.jet.article.ui.theme
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.runtime.ProvidableCompositionLocal
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -13,7 +11,8 @@ import androidx.compose.ui.unit.dp
  * @since 1.0.0
  */
 data class ArticleDimensions constructor(
-    val defaultHorizontalPadding: Dp,
+    val startPadding: Dp,
+    val endPadding: Dp,
     val topLinePadding: Dp,
     val bottomLinePadding: Dp,
     val quoteVerticalPadding: Dp,
@@ -21,6 +20,8 @@ data class ArticleDimensions constructor(
     val titleTopLinePadding: Dp,
     val tableMinColumnWidth: Dp,
     val tableMaxColumnWidth: Dp,
+    val tableContentPadding: PaddingValues,
+
     val spaceBetweenIconAndTextInList: Dp,
     val spaceBetweenListItems: Dp,
     val spaceBetweenQuoteAndVerticalLine: Dp,
@@ -29,7 +30,8 @@ data class ArticleDimensions constructor(
 ) {
     companion object {
         val Default: ArticleDimensions = ArticleDimensions(
-            defaultHorizontalPadding = 16.dp,
+            startPadding = 16.dp,
+            endPadding = 16.dp,
             topLinePadding = 24.dp,
             bottomLinePadding = 32.dp,
             quoteVerticalPadding = 8.dp,
@@ -37,7 +39,7 @@ data class ArticleDimensions constructor(
             titleTopLinePadding = 24.dp,
             tableMinColumnWidth = 128.dp,
             tableMaxColumnWidth = 256.dp,
-
+            tableContentPadding = PaddingValues(all = 8.dp),
             spaceBetweenIconAndTextInList = 6.dp,
             spaceBetweenListItems = 6.dp,
             spaceBetweenQuoteAndVerticalLine = 12.dp,

@@ -2,6 +2,7 @@ package com.jet.article.ui.elements
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.CircularProgressIndicator
@@ -21,6 +22,7 @@ import coil.compose.SubcomposeAsyncImage
 import coil.imageLoader
 import com.jet.article.core.ArticleElement
 import com.jet.article.ui.R
+import com.jet.article.ui.theme.LocalArticleDimensions
 
 /**
  * @since 1.0.0
@@ -62,9 +64,14 @@ fun ImageElement(
     error: @Composable () -> Unit = { HtmlImageDefaults.ErrorLayout() },
 ) {
     val context = LocalContext.current
+    val dimensions= LocalArticleDimensions.current
 
     SubcomposeAsyncImage(
         modifier = modifier
+            .padding(
+                start = dimensions.startPadding,
+                end = dimensions.endPadding,
+            )
             .htmlImage(size = defaultSize)
             .clip(shape = shape),
         model = url,

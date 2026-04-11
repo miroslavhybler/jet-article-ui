@@ -36,14 +36,20 @@ fun ContentList(
     val density = LocalDensity.current
     val dimensions = LocalArticleDimensions.current
 
-    Column(modifier = modifier.fillMaxWidth(),
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(
+                start = dimensions.startPadding,
+                end = dimensions.endPadding,
+            ),
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(space = dimensions.spaceBetweenListItems)) {
+        verticalArrangement = Arrangement.spacedBy(space = dimensions.spaceBetweenListItems)
+    ) {
         list.items.fastForEach { item ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Top,
-
             ) {
                 Icon(
                     modifier = Modifier

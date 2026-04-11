@@ -25,8 +25,8 @@ import com.jet.article.ui.theme.articleTypography
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -101,11 +101,11 @@ fun TextElement(
                     }
                 }
             }
-            .let { originalModifier ->
-                if (text.isTitle) {
-                    originalModifier.padding(top = dimensions.titleTopLinePadding)
-                } else originalModifier
-            },
+            .padding(
+                top = if (text.isTitle) dimensions.titleTopLinePadding else 0.dp,
+                start = dimensions.startPadding,
+                end = dimensions.endPadding,
+            ),
         text = finalFormattedText,
         style = textStyle.merge(other = text.style.copy(color = color)),
         onTextLayout = {

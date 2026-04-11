@@ -26,10 +26,12 @@ private fun TableCellContent(
     headerColor: Color,
     borderColor: Color
 ) {
+    val dimensions = LocalArticleDimensions.current
+
     Column(
         modifier = Modifier
-            .border(0.5.dp, borderColor)
-            .padding(8.dp)
+            .border(width = 0.5.dp, color = borderColor)
+            .padding(paddingValues = dimensions.tableContentPadding)
     ) {
         cell.content.forEach { element ->
             if (element is ArticleElement.Text) {
@@ -58,18 +60,22 @@ fun ContentTable(
 
     SubcomposeLayout(
         modifier = modifier
-            .clip(shape)
-            .horizontalScroll(scrollState)
-            .border(1.dp, borderColor, shape)
+            .horizontalScroll(state = scrollState)
+            .padding(
+                start = dimensions.startPadding,
+                end = dimensions.endPadding,
+            )
+            .border(width = 1.dp, color = borderColor, shape = shape)
+            .clip(shape = shape)
     ) { constraints ->
         val columnCount = table.rows.firstOrNull()?.cells?.size ?: 0
         if (columnCount == 0) {
-            return@SubcomposeLayout layout(0, 0) {}
+            return@SubcomposeLayout layout(width = 0, height = 0) {}
         }
 
         // 1. Measurement pass to determine column widths
-        val columnWidths = MutableList(columnCount) { minColumnWidth.toPx() }
-        val measurementPlaceables = subcompose("measurement") {
+        val columnWidths = MutableList(size = columnCount) { minColumnWidth.toPx() }
+        val measurementPlaceables = subcompose(slotId = "measurement") {
             table.rows.forEach { row ->
                 val isHeader = table.rows.firstOrNull() == row
                 row.cells.forEach { cell ->
@@ -86,10 +92,13 @@ fun ContentTable(
             it.measure(Constraints())
         }
 
-        measurementPlaceables.chunked(columnCount).forEach { rowOfPlaceables ->
+        measurementPlaceables.chunked(size = columnCount).forEach { rowOfPlaceables ->
             rowOfPlaceables.forEachIndexed { index, placeable ->
                 if (index < columnWidths.size) {
-                    columnWidths[index] = maxOf(columnWidths[index], placeable.width.toFloat())
+                    columnWidths[index] = maxOf(
+                        a = columnWidths[index],
+                        b = placeable.width.toFloat()
+                    )
                 }
             }
         }
@@ -97,14 +106,14 @@ fun ContentTable(
         // Constrain column widths
         columnWidths.forEachIndexed { index, width ->
             columnWidths[index] = width.coerceIn(
-                minColumnWidth.toPx(),
-                maxColumnWidth.toPx()
+                minimumValue = minColumnWidth.toPx(),
+                maximumValue = maxColumnWidth.toPx()
             )
         }
         val totalWidth = columnWidths.sum().toInt()
 
         // 2. Layout pass
-        val layoutPlaceables = subcompose("layout") {
+        val layoutPlaceables = subcompose(slotId = "layout") {
             table.rows.forEach { row ->
                 val isHeader = table.rows.firstOrNull() == row
                 row.cells.forEach { cell ->
@@ -118,22 +127,22 @@ fun ContentTable(
             }
         }.mapIndexed { index, measurable ->
             val columnIndex = index % columnCount
-            measurable.measure(Constraints.fixedWidth(columnWidths[columnIndex].toInt()))
+            measurable.measure(constraints = Constraints.fixedWidth(width = columnWidths[columnIndex].toInt()))
         }
 
-        val totalHeight = layoutPlaceables.chunked(columnCount)
-            .sumOf { rowOfPlaceables ->
-                rowOfPlaceables.maxOfOrNull { it.height } ?: 0
-            }
+        val totalHeight = layoutPlaceables.chunked(size = columnCount)
+            .sumOf(selector = { rowOfPlaceables ->
+                rowOfPlaceables.maxOfOrNull(selector = { it.height }) ?: 0
+            })
 
-        layout(totalWidth, totalHeight) {
+        layout(width = totalWidth, height = totalHeight) {
             var y = 0
-            layoutPlaceables.chunked(columnCount).forEach { rowOfPlaceables ->
+            layoutPlaceables.chunked(size = columnCount).forEach { rowOfPlaceables ->
                 var x = 0
                 val rowHeight = rowOfPlaceables.maxOfOrNull { it.height } ?: 0
                 rowOfPlaceables.forEachIndexed { index, placeable ->
                     if (index < columnWidths.size) {
-                        placeable.placeRelative(x, y)
+                        placeable.placeRelative(x = x, y = y)
                         x += columnWidths[index].toInt()
                     }
                 }

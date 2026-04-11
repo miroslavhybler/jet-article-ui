@@ -43,6 +43,10 @@ fun Quote(
 
     Surface(
         modifier = modifier
+            .padding(
+                start = dimensions.startPadding,
+                end = dimensions.endPadding,
+            )
             .fillMaxWidth()
             .wrapContentHeight(),
         shape = shape,
@@ -55,7 +59,7 @@ fun Quote(
             Spacer(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .width(width =dimensions.quoteLineWidth)
+                    .width(width = dimensions.quoteLineWidth)
                     .background(
                         color = ArticleTheme.colorScheme.quoteVerticalLineColor,
                         shape = lineShape,

@@ -37,8 +37,8 @@ object ArticleDefaults {
     val DefaultContentPadding: PaddingValues = PaddingValues(
         top = ArticleDimensions.Default.topLinePadding,
         bottom = ArticleDimensions.Default.bottomLinePadding,
-        start = ArticleDimensions.Default.defaultHorizontalPadding,
-        end = ArticleDimensions.Default.defaultHorizontalPadding,
+        start = ArticleDimensions.Default.startPadding,
+        end = ArticleDimensions.Default.startPadding,
     )
 
 
