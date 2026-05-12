@@ -47,6 +47,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
     implementation(platform(libs.androidx.compose.bom))
     compileOnly(libs.androidx.compose.ui)
     compileOnly(libs.androidx.compose.ui.graphics)
